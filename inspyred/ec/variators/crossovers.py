@@ -68,6 +68,12 @@ def crossover(cross):
     """
     @functools.wraps(cross)
     def inspyred_crossover(random, candidates, args):
+        
+        #print(args)
+        
+        if args['inheritance'] is True and 'family_tree' not in args.keys():
+            args['family_tree'] = {}
+        
         if len(candidates) % 2 == 1:
             candidates = candidates[:-1]
         moms = candidates[::2]
@@ -77,6 +83,8 @@ def crossover(cross):
             cross.index = i
             offspring = cross(random, mom, dad, args)
             for o in offspring:
+                if args['inheritance'] is True:
+                    args['family_tree'][hash(tuple(o))] = {"mom": mom, "dad": dad}
                 children.append(o)
         return children
     inspyred_crossover.single_crossover = cross

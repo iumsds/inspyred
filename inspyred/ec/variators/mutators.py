@@ -59,7 +59,13 @@ def mutator(mutate):
     def inspyred_mutator(random, candidates, args):
         mutants = []
         for i, cs in enumerate(candidates):
-            mutants.append(mutate(random, cs, args))
+            if args['inheritance'] is True:
+                before_mutation = cs
+            mutant = mutate(random, cs, args)
+            if args['inheritance'] is True:
+                parents = args['family_tree'].pop(hash(tuple(before_mutation)))
+                args['family_tree'][hash(tuple(mutant))] = parents
+            mutants.append(mutant)
         return mutants
     inspyred_mutator.single_mutation = mutate
     return inspyred_mutator
