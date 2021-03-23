@@ -63,7 +63,9 @@ def mutator(mutate):
                 before_mutation = cs
             mutant = mutate(random, cs, args)
             if args['inheritance'] is True:
-                parents = args['family_tree'].pop(hash(tuple(before_mutation)))
+                
+                # Attempts to find existing parents created during the crossover function. If not, defaults to setting before_mutation as the parent
+                parents = args['family_tree'].pop(hash(tuple(before_mutation)), hash(tuple(before_mutation)))
                 args['family_tree'][hash(tuple(mutant))] = parents
             mutants.append(mutant)
         return mutants

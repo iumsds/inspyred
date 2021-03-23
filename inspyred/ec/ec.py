@@ -213,6 +213,7 @@ class Individual(object):
         self.fitness = None
         self.birthdate = time.time()
         self.maximize = maximize
+        self.parents = {"mom": None, "dad": None}
     
     @property
     def candidate(self):
@@ -222,6 +223,9 @@ class Individual(object):
     def candidate(self, value):
         self._candidate = value
         self.fitness = None
+        
+    def set_parents(self, parents):
+        self.parents = parents
         
     def __str__(self):
         return '{0} : {1}'.format(str(self.candidate), str(self.fitness))
@@ -489,6 +493,9 @@ class EvolutionaryComputation(object):
                 if fit is not None:
                     off = Individual(cs, maximize=maximize)
                     off.fitness = fit
+                    if 'family_tree' in args:
+                        off_parents = args['family_tree'][hash(tuple(cs))]
+                        off.set_parents(off_parents)
                     offspring.append(off)
                 else:
                     self.logger.warning('excluding candidate {0} because fitness received as None'.format(cs))
@@ -514,7 +521,12 @@ class EvolutionaryComputation(object):
             for obs in observers:
                 self.logger.debug('observation using {0} at generation {1} and evaluation {2}'.format(obs.__name__, self.num_generations, self.num_evaluations))
                 obs(population=list(self.population), num_generations=self.num_generations, num_evaluations=self.num_evaluations, args=self._kwargs)
-
+        
+        try:
+            self._kwargs['individuals_file'].close()
+            self._kwargs['statistics_file'].close()
+        except:
+            pass
         return self.population
 
 

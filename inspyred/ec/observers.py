@@ -178,7 +178,9 @@ def file_observer(population, num_generations, num_evaluations, args):
     try:
         individuals_file = args['individuals_file']
     except KeyError:
-        individuals_file = open('inspyred-individuals-file-{0}.csv'.format(time.strftime('%m%d%Y-%H%M%S')), 'w')
+        #individuals_file = open('inspyred-individuals-file-{0}.csv'.format(time.strftime('%m%d%Y-%H%M%S')), 'w')
+        individuals_file = open('inspyred-individuals-file.csv', 'w')
+        #individuals_file.write("i,fitness,values,hash,mom_hash,dad_hash\n")
         args['individuals_file'] = individuals_file
 
     stats = inspyred.ec.analysis.fitness_statistics(population)
@@ -190,7 +192,7 @@ def file_observer(population, num_generations, num_evaluations, args):
     
     statistics_file.write('{0}, {1}, {2}, {3}, {4}, {5}, {6}\n'.format(num_generations, len(population), worst_fit, best_fit, med_fit, avg_fit, std_fit))
     for i, p in enumerate(population):
-        individuals_file.write('{0}, {1}, {2}, {3}\n'.format(num_generations, i, p.fitness, str(p.candidate)))
+        individuals_file.write('{0}, {1}, {2}, {3}, {4}, {5}, {6}\n'.format(num_generations, i, p.fitness, str(p.candidate), hash(tuple(p.candidate)), p.parents['mom'], p.parents['dad']))
     statistics_file.flush()
     individuals_file.flush()
     
