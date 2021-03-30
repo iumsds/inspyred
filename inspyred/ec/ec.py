@@ -213,7 +213,7 @@ class Individual(object):
         self.fitness = None
         self.birthdate = time.time()
         self.maximize = maximize
-        self.parents = {"mom": None, "dad": None}
+        self.parents = {"mom": '', "dad": ''}
     
     @property
     def candidate(self):
