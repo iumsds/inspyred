@@ -174,13 +174,14 @@ def file_observer(population, num_generations, num_evaluations, args):
         statistics_file = args['statistics_file']
     except KeyError:
         statistics_file = open('inspyred-statistics-file-{0}.csv'.format(time.strftime('%m%d%Y-%H%M%S')), 'w')
+        statistics_file.write("num_generations,population_length,worst_fit,best_fit,median_fit,average_fit,std_fit,best_fit_candidate_hash\n")
         args['statistics_file'] = statistics_file
     try:
         individuals_file = args['individuals_file']
     except KeyError:
         #individuals_file = open('inspyred-individuals-file-{0}.csv'.format(time.strftime('%m%d%Y-%H%M%S')), 'w')
         individuals_file = open('inspyred-individuals-file.csv', 'w')
-        #individuals_file.write("i,fitness,values,hash,mom_hash,dad_hash\n")
+        individuals_file.write("generation,i,fitness,hash,mom_hash,dad_hash,values\n")
         args['individuals_file'] = individuals_file
 
     stats = inspyred.ec.analysis.fitness_statistics(population)
@@ -190,9 +191,15 @@ def file_observer(population, num_generations, num_evaluations, args):
     med_fit = stats['median']
     std_fit = stats['std']
     
-    statistics_file.write('{0},{1},{2},{3},{4},{5},{6}\n'.format(num_generations, len(population), worst_fit, best_fit, med_fit, avg_fit, std_fit))
+    
+    
+    best_fitness_candidate = None
     for i, p in enumerate(population):
-        individuals_file.write('{0},{1},{2},{3},{4},{5},{6}\n'.format(num_generations, i, p.fitness, hash(tuple(p.candidate)), p.parents['mom'], p.parents['dad'], str(p.candidate)))
+        individuals_file.write('{0},{1},{2},{3},{4},{5},{6}\n'.format(num_generations, i, p.fitness, hash(tuple(p.candidate)), p.parents['mom'], p.parents['dad'], str(p.candidate).replace(',',' ').replace('[','').replace(']','')))
+        if p.fitness == best_fit:
+            best_fitness_candidate = p.candidate
+    statistics_file.write('{0},{1},{2},{3},{4},{5},{6},{7}\n'.format(num_generations, len(population), worst_fit, best_fit, med_fit, avg_fit, std_fit, hash(tuple(best_fitness_candidate))))
+    
     statistics_file.flush()
     individuals_file.flush()
     
