@@ -190,9 +190,9 @@ def file_observer(population, num_generations, num_evaluations, args):
     med_fit = stats['median']
     std_fit = stats['std']
     
-    statistics_file.write('{0}, {1}, {2}, {3}, {4}, {5}, {6}\n'.format(num_generations, len(population), worst_fit, best_fit, med_fit, avg_fit, std_fit))
+    statistics_file.write('{0},{1},{2},{3},{4},{5},{6}\n'.format(num_generations, len(population), worst_fit, best_fit, med_fit, avg_fit, std_fit))
     for i, p in enumerate(population):
-        individuals_file.write('{0}, {1}, {2}, {3}, {4}, {5}, {6}\n'.format(num_generations, i, p.fitness, hash(tuple(p.candidate)), p.parents['mom'], p.parents['dad'], str(p.candidate)))
+        individuals_file.write('{0},{1},{2},{3},{4},{5},{6}\n'.format(num_generations, i, p.fitness, hash(tuple(p.candidate)), p.parents['mom'], p.parents['dad'], str(p.candidate)))
     statistics_file.flush()
     individuals_file.flush()
     
