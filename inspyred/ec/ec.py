@@ -213,7 +213,7 @@ class Individual(object):
         self.fitness = None
         self.birthdate = time.time()
         self.maximize = maximize
-        self.parents = {"mom": '', "dad": ''}
+        self.parents = {"mom": 0, "dad": 0}
     
     @property
     def candidate(self):
@@ -494,7 +494,10 @@ class EvolutionaryComputation(object):
                     off = Individual(cs, maximize=maximize)
                     off.fitness = fit
                     if 'family_tree' in args:
-                        off_parents = args['family_tree'][hash(tuple(cs))]
+                        try:
+                            off_parents = args['family_tree'][hash(tuple(cs))]
+                        except KeyError as error:
+                            off_parents = {"mom": 0, "dad": 0}
                         off.set_parents(off_parents)
                     offspring.append(off)
                 else:
