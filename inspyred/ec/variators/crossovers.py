@@ -68,11 +68,6 @@ def crossover(cross):
     """
     @functools.wraps(cross)
     def inspyred_crossover(random, candidates, args):
-                
-        if args['inheritance'] is True and 'family_tree' not in list(args.keys()):
-            print("initializing family tree in crossovers")
-            args['family_tree'] = {}
-        
         if len(candidates) % 2 == 1:
             candidates = candidates[:-1]
         moms = candidates[::2]
@@ -82,7 +77,7 @@ def crossover(cross):
             cross.index = i
             offspring = cross(random, mom, dad, args)
             for o in offspring:
-                if args['inheritance'] is True:
+                if 'family_tree' in args:
                     args['family_tree'][hash(tuple(o))] = {"mom": hash(tuple(mom)), "dad": hash(tuple(dad))}
                 children.append(o)
         return children
@@ -153,7 +148,7 @@ def uniform_crossover(random, mom, dad, args):
 
     Optional keyword arguments in args:
     
-    - *crossover_rate* -- the rate at which crossover is performed 
+    - *crossover_rate* -- the rate at which crossover is performed
       (default 1.0)
     - *ux_bias* -- the bias toward the first candidate in the crossover 
       (default 0.5)

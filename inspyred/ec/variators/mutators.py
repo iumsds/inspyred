@@ -59,13 +59,15 @@ def mutator(mutate):
     def inspyred_mutator(random, candidates, args):
         mutants = []
         for i, cs in enumerate(candidates):
-            if args['inheritance'] is True:
+            if 'family_tree' in args:
                 before_mutation = cs
             mutant = mutate(random, cs, args)
-            if args['inheritance'] is True:
-                
-                # Attempts to find existing parents created during the crossover function. If not, defaults to setting before_mutation as the parent
-                parents = args['family_tree'].pop(hash(tuple(before_mutation)), hash(tuple(before_mutation)))
+            if 'family_tree' in args:
+                before_mutation_hash = hash(tuple(before_mutation))
+                if before_mutation_hash in args['family_tree']:
+                    parents = args['family_tree'][before_mutation_hash]
+                else:
+                    parents = {"mom": before_mutation_hash, "dad": before_mutation_hash}
                 args['family_tree'][hash(tuple(mutant))] = parents
             mutants.append(mutant)
         return mutants
