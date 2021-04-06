@@ -48,7 +48,6 @@ def tanager_file_observer(population, num_generations, num_evaluations, args):
     individuals_file.flush()
     
 if __name__ == '__main__':
-    print("init")
     prng = Random()
     prng.seed(time.time())
     
