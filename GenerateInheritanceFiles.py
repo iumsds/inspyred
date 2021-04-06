@@ -53,7 +53,7 @@ if __name__ == '__main__':
     
     problem_choice = 0
     while problem_choice not in ['1','2','3','4','5','6','7','8','9']:
-        problem_choice = input("~~ Choose Benchmark Problem ~~\n 1. Rastrigin\t2. Binary\t\t3. Ackley\n4. Rosenbrock\t5. Schwefel\t\t6. Sphere\n7. Kursawe\t8. Travelling Salesman\t9. Knapsack\nENTER: ")
+        problem_choice = input("~~ Choose Benchmark Problem ~~\n1. Rastrigin\t2. Binary\t\t3. Ackley\n4. Rosenbrock\t5. Schwefel\t\t6. Sphere\n7. Kursawe\t8. Travelling Salesman\t9. Knapsack\nENTER: ")
         if problem_choice not in ['1','2','3','4','5','6','7','8','9']:
             print("Enter the integer corresponding to the your chosen problem")
     if problem_choice == '1':
