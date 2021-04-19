@@ -48,7 +48,7 @@ def tanager_file_observer(population, num_generations, num_evaluations, args):
     if 'statistics_file' in args:     #prepare stats file.
         statistics_file = args['statistics_file']
     else:
-        header_row = "num_generations,population_length,worst_fit,best_fit,median_fit,average_fit,std_fit,best_fit_candidate_hash\n"
+        header_row = "generation,population_length,worst_fit,best_fit,median_fit,average_fit,std_fit,best_fit_candidate_hash,best_fit_candidate_i\n"
         statistics_file = get_file(project_name, 'tanager-statistics-file.csv', header_row)
         args['statistics_file'] = statistics_file
 
@@ -58,19 +58,6 @@ def tanager_file_observer(population, num_generations, num_evaluations, args):
         header_row = "generation,i,fitness,hash,mom_hash,dad_hash,values\n"
         individuals_file = get_file(project_name, 'tanager-individuals-file.csv', header_row)
         args['individuals_file'] = individuals_file
-
-    # try:
-    #     statistics_file = args['statistics_file']
-    # except KeyError:
-    #     statistics_file = open('tanager-statistics-file-{0}.csv'.format(time.strftime('%m%d%Y-%H%M%S')), 'w')
-    #     statistics_file.write("num_generations,population_length,worst_fit,best_fit,median_fit,average_fit,std_fit,best_fit_candidate_hash\n")
-    #     args['statistics_file'] = statistics_file
-    # try:
-    #     individuals_file = args['individuals_file']
-    # except KeyError:
-    #     individuals_file = open('tanager-individuals-file-{}.csv'.format(time.strftime('%m%d%Y-%H%M%S')), 'w')
-    #     individuals_file.write("generation,i,fitness,hash,mom_hash,dad_hash,values\n")
-    #     args['individuals_file'] = individuals_file
 
     stats = inspyred.ec.analysis.fitness_statistics(population)
     worst_fit = stats['worst']
@@ -89,12 +76,11 @@ def tanager_file_observer(population, num_generations, num_evaluations, args):
             parents = {"mom": 0, "dad": 0}
         candidate_value = str(p.candidate).replace(',',' ').replace('[','').replace(']','')
         individuals_file.write(f"{num_generations},{i},{p.fitness},{p_hash},{parents['mom']},{parents['dad']},{candidate_value}\n")
-        #individuals_file.write('{0},{1},{2},{3},{4},{5},{6}\n'.format(num_generations, i, p.fitness, p_hash, parents['mom'], parents['dad'], str(p.candidate).replace(',',' ').replace('[','').replace(']','')))
         if p.fitness == best_fit:
             best_fitness_candidate = p.candidate
             best_fitness_candidate_i = i
-    statistics_file.write(f"{num_generations},{len(population)},{worst_fit},{best_fit},{med_fit},{avg_fit},{std_fit},{best_fitness_candidate_i}\n")
-    #statistics_file.write('{0},{1},{2},{3},{4},{5},{6},{7}\n'.format(num_generations, len(population), worst_fit, best_fit, med_fit, avg_fit, std_fit, hash(tuple(best_fitness_candidate))))
+
+    statistics_file.write(f"{num_generations},{len(population)},{worst_fit},{best_fit},{med_fit},{avg_fit},{std_fit},{best_fitness_candidate},{best_fitness_candidate_i}\n")
 
     statistics_file.flush()
     individuals_file.flush()
