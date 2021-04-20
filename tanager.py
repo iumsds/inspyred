@@ -77,7 +77,7 @@ def tanager_file_observer(population, num_generations, num_evaluations, args):
         candidate_value = str(p.candidate).replace(',',' ').replace('[','').replace(']','')
         individuals_file.write(f"{num_generations},{i},{p.fitness},{p_hash},{parents['mom']},{parents['dad']},{candidate_value}\n")
         if p.fitness == best_fit:
-            best_fitness_candidate = p.candidate
+            best_fitness_candidate = candidate_value
             best_fitness_candidate_i = i
 
     statistics_file.write(f"{num_generations},{len(population)},{worst_fit},{best_fit},{med_fit},{avg_fit},{std_fit},{best_fitness_candidate},{best_fitness_candidate_i}\n")
